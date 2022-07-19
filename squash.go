@@ -12,10 +12,14 @@ func (bot *robot) handleSquashLabel(e *sdk.PullRequestEvent, commits uint, cfg S
 		return nil
 	}
 
+	org, repo := e.GetOrgRepo()
+	if org == "openeuler" && repo == "kernel" {
+		return nil
+	}
+
 	labels := e.GetPRLabelSet()
 	hasSquashLabel := labels.Has(cfg.SquashCommitLabel)
 	exceeded := commits > cfg.CommitsThreshold
-	org, repo := e.GetOrgRepo()
 	number := e.GetPRNumber()
 
 	if exceeded && !hasSquashLabel {
